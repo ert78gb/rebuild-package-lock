@@ -1,0 +1,48 @@
+name: 'Automatically Rebuild package-lock.json'
+description: 'A GitHub action to automatically rebuild / update package-lock.json'
+inputs:
+  token:
+    description: 'GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)'
+    default: ${{ github.token }}
+  node-version:
+    description: '"node-version" argument of https://github.com/actions/setup-node'
+  node-version-file:
+    description: '"node-version-file" argument of https://github.com/actions/setup-node'
+    default: '.nvmrc'
+  commit-message:
+    default: 'fix: rebuild package-lock.json to upgrade transient dependencies'
+    description: 'The message to use when committing changes. It will be the title of the PR too'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+        token: ${{ inputs.token }}
+
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: ${{ inputs.node-version-file }}
+        cache: npm
+
+    - name: Delete package-lock.json
+      shell: bash
+      run: rm package-lock.json
+
+    - name: Install dependencies
+      shell: bash
+      run: npm i
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v7
+      with:
+        add-paths: 'package-lock.json'
+        commit-message: ${{ inputs.commit-message }}
+        body: ''
+        branch: 'fix-rebuild-package-lock'
+        branch-suffix: timestamp
+        title: ${{ inputs.commit-message }}
+        token: '${{ inputs.token }}'
