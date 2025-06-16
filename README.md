@@ -18,3 +18,21 @@ All inputs are optional. If not set, sensible defaults will be used.
 | node-version      | See [node-version of setup-node](https://github.com/actions/setup-node#usage)                                                                                                                        |                                                                  |
 | node-version-file | See [node-version-file of setup-node](https://github.com/actions/setup-node#usage)                                                                                                                   | `.nvmrc`                                                         |
 | commit-message    | The message to use when committing changes. It will be the title of the PR too                                                                                                                       | fix: rebuild package-lock.json to upgrade transient dependencies |
+
+## Example
+
+```yaml
+name: Rebuild package-lock.json
+on:
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: ert78gb/rebuild-package-lock@master
+        with:
+          token: '${{ secrets.GH_REBUILD_PACKAGE_JSON_TOKEN }}'
+```
