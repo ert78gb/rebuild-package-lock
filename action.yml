@@ -26,7 +26,6 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
         node-version-file: ${{ inputs.node-version-file }}
-        cache: npm
 
     - name: Delete package-lock.json
       shell: bash
