@@ -33,7 +33,7 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: npm i
+      run: npm i --ignore-scripts
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
