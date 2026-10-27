@@ -36,7 +36,7 @@ runs:
       run: npm i --ignore-scripts
 
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v7
+      uses: peter-evans/create-pull-request@v8
       with:
         add-paths: 'package-lock.json'
         commit-message: ${{ inputs.commit-message }}
